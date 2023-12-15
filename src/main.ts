@@ -1,9 +1,23 @@
 // weather-dashboard/src/main.ts
 
-import './styles/style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './styles/style.css';
+import typescriptLogo from './assets/typescript.svg';
+import viteLogo from '/vite.svg';
+import { setupCounter } from './counter.ts';
+import { fetchWeatherData } from './components/WeatherDashboard';
+
+// Declare the alpine property on the window object
+declare global {
+  interface CustomWindow extends Window {
+    alpine: {
+      fetchWeatherData: () => Promise<any>;
+      // Add other properties if needed
+    };
+  }
+}
+
+// Register the fetchWeatherData function globally
+(window as unknown as CustomWindow).alpine = { fetchWeatherData };
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -21,6 +35,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       Click on the Vite and TypeScript logos to learn more
     </p>
   </div>
-`
+`;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);

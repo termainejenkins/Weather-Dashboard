@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -35,7 +36,7 @@ func main() {
 	// Define a route to fetch weather data
 	router.GET("/api/weather", func(c *gin.Context) {
 		// Replace "YOUR_API_KEY" with your OpenWeatherMap API key
-		apiKey := "YOUR_API_KEY"
+		apiKey := "f1b9f1215362915f9c02ca5da2128e90"
 		weatherURL := fmt.Sprintf("http://api.openweathermap.org/data/2.5/weather?q=CityName&appid=%s", apiKey)
 
 		// Make a GET request to the OpenWeatherMap API
@@ -52,9 +53,9 @@ func main() {
 			return
 		}
 
-		// Parse the JSON response
+		// Parse the JSON response using the "encoding/json" package
 		var weatherData map[string]interface{}
-		if err := response.JSON(&weatherData); err != nil {
+		if err := json.NewDecoder(response.Body).Decode(&weatherData); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse weather data"})
 			return
 		}
