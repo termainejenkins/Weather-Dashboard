@@ -1,6 +1,6 @@
 <!-- src/components/WeatherDashboard.html -->
 
-<div x-data="{ weather: { temperature: 0, condition: 'Loading...' }, message: '' }" x-init="fetchWeatherData">
+<div x-data="{ weather: { temperature: 0, condition: 'Loading...' }, message: '' }" x-init="() => fetchWeatherData()">
     <h1 x-text="'Temperature: ' + (weather ? weather.temperature + '°C' : 'N/A') + ', Condition: ' + (weather ? weather.condition : 'Unknown')"></h1>
     <p x-text="message"></p>
 
@@ -11,7 +11,7 @@
                 window.alpine.weather = data;
             } catch (error) {
                 console.error('Error fetching weather data:', error);
-                window.alpine.weather = null; // Set to null or undefined in case of failure
+                window.alpine.weather = null;
                 window.alpine.message = 'Failed to fetch weather data. Please try again later.';
             }
         }

@@ -6,6 +6,7 @@ import viteLogo from '/vite.svg';
 import { setupCounter } from './counter.ts';
 import { fetchWeatherData } from './components/WeatherDashboard';
 
+
 // Declare the alpine property on the window object
 declare global {
   interface CustomWindow extends Window {
@@ -18,6 +19,8 @@ declare global {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  console.log('DOMContentLoaded event fired'); // Add this log
+
   const appContainer = document.querySelector<HTMLDivElement>('#app');
 
   if (appContainer) {
@@ -31,13 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h1 x-text="'Temperature: ' + (weather ? weather.temperature + '°C' : 'N/A') + ', Condition: ' + (weather ? weather.condition : 'Unknown')"></h1>
         <p x-text="message"></p>
 
-        <a href="https://github.com/termainejenkins" target="_blank">
-          <img src="${viteLogo}" class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://github.com/termainejenkins" target="_blank">
-          <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-        </a>
-        
         <div class="card">
           <button id="counter" type="button"></button>
         </div>
@@ -60,5 +56,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Add an Alpine.js initializer function
 (window as CustomWindow).initAlpine = () => {
+  console.log('initAlpine function called'); // Add this log
   // You can put any additional initialization logic here
 };
+
+/*
+<a href="https://github.com/termainejenkins" target="_blank">
+          <img src="${viteLogo}" class="logo" alt="Vite logo" />
+        </a>
+        <a href="https://github.com/termainejenkins" target="_blank">
+          <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
+        </a>
+        
+*/
