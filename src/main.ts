@@ -9,32 +9,56 @@ import { fetchWeatherData } from './components/WeatherDashboard';
 // Declare the alpine property on the window object
 declare global {
   interface CustomWindow extends Window {
-    alpine: {
-      fetchWeatherData: () => Promise<any>;
+    alpine?: {
+      fetchWeatherData?: () => Promise<any>; // Make fetchWeatherData optional
       // Add other properties if needed
     };
+    initAlpine?: () => void; // Declare initAlpine property
   }
 }
 
-// Register the fetchWeatherData function globally
-(window as unknown as CustomWindow).alpine = { fetchWeatherData };
+document.addEventListener('DOMContentLoaded', async () => {
+  const appContainer = document.querySelector<HTMLDivElement>('#app');
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://github.com/termainejenkins" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://github.com/termainejenkins" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Weather Dashboard</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+  if (appContainer) {
+    // Initialize alpine as an empty object
+    const alpine: { fetchWeatherData?: () => Promise<any> } = (window as CustomWindow).alpine || {};
+    alpine.fetchWeatherData = fetchWeatherData;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);
+    // Set up Alpine.js
+    appContainer.innerHTML = `
+      <div x-data="{ weather: { temperature: 0, condition: 'Loading...' }, message: '' }" x-init="initAlpine">
+        <h1 x-text="'Temperature: ' + (weather ? weather.temperature + '°C' : 'N/A') + ', Condition: ' + (weather ? weather.condition : 'Unknown')"></h1>
+        <p x-text="message"></p>
+
+        <a href="https://github.com/termainejenkins" target="_blank">
+          <img src="${viteLogo}" class="logo" alt="Vite logo" />
+        </a>
+        <a href="https://github.com/termainejenkins" target="_blank">
+          <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
+        </a>
+        
+        <div class="card">
+          <button id="counter" type="button"></button>
+        </div>
+        
+        <p class="read-the-docs">
+          Click on the Vite and TypeScript logos to learn more
+        </p>
+      </div>
+    `;
+
+    // Set up Alpine.js fetchWeatherData globally
+    (window as CustomWindow).alpine = alpine;
+
+    // Initialize counter and other logic
+    setupCounter(appContainer.querySelector<HTMLButtonElement>('#counter')!);
+  } else {
+    console.error('#app element not found');
+  }
+});
+
+// Add an Alpine.js initializer function
+(window as CustomWindow).initAlpine = () => {
+  // You can put any additional initialization logic here
+};

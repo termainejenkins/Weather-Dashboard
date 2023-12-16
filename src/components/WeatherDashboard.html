@@ -1,16 +1,18 @@
 <!-- src/components/WeatherDashboard.html -->
 
-<div x-data="{ weather: null }" x-init="fetchWeatherData">
-    <h1 x-text="weather ? `Temperature: ${weather.temperature}°C, Condition: ${weather.condition}` : 'Loading...'"></h1>
+<div x-data="{ weather: { temperature: 0, condition: 'Loading...' }, message: '' }" x-init="fetchWeatherData">
+    <h1 x-text="'Temperature: ' + (weather ? weather.temperature + '°C' : 'N/A') + ', Condition: ' + (weather ? weather.condition : 'Unknown')"></h1>
+    <p x-text="message"></p>
 
     <script>
         async function fetchWeatherData() {
             try {
-                // Import the fetchWeatherData function from TypeScript file
-                const data = await window.alpine.fetchWeatherData();
+                const data = await window.fetchWeatherData();
                 window.alpine.weather = data;
             } catch (error) {
                 console.error('Error fetching weather data:', error);
+                window.alpine.weather = null; // Set to null or undefined in case of failure
+                window.alpine.message = 'Failed to fetch weather data. Please try again later.';
             }
         }
     </script>

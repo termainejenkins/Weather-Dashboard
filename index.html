@@ -1,4 +1,4 @@
-// weather-dashboard/index.html
+<!-- weather-dashboard/index.html -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,19 +6,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="https://github.com/termainejenkins" />
-  <title>Weather Dashboard</title>
+  <title  >Weather Dashboard</title>
 </head>
-<body x-data="{ message: '', weather: null }">
+<body x-data="{ message: '', weather: '', zipCode: '', city: '' }">
   <h1>Weather DashBoard</h1>
   <p x-text="message"></p>
   
-  <!-- Button to fetch weather data -->
-  <button x-on:click="fetchWeatherData">Fetch Weather</button>
+  <div>
+    <!--Input field to enter zip code -->
+    enter zip code
+    <input type="text" x-model="zipCode">
+
+    <!-- Input field to enter city -->
+    enter city
+    <input type="text" x-model="city">
+
+    <!-- Button to fetch weather data -->
+    <button x-on:click="fetchWeatherData">Fetch Weather</button>
+
+  </div>
 
   <!-- Display weather information -->
   <div x-show="weather">
     <h2 x-text="'Temperature: ' + weather.temperature + '°C, Condition: ' + weather.condition"></h2>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
   <script type="module" src="/src/main.ts"></script>
   <script type="module" src="/src/components/WeatherDashboard.ts"></script>
