@@ -55,10 +55,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Add an Alpine.js initializer function
-(window as CustomWindow).initAlpine = () => {
-  console.log('initAlpine function called'); // Add this log
-  // You can put any additional initialization logic here
+(window as CustomWindow).initAlpine = async () => {
+  console.log('initAlpine function called');
+  // Your initialization logic here, like fetching data or setting up UI
+  
+  const appContainer = document.querySelector<HTMLDivElement>('#app');
+  if (appContainer) {
+    // Set up Alpine.js in the #app element
+    
+  } else {
+    console.error('#app element not found');
+  }
 };
+
+
 
 /*
 <a href="https://github.com/termainejenkins" target="_blank">

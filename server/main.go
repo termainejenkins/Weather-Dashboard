@@ -1,10 +1,9 @@
-// server/main.go
-
 package main
 
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"path/filepath"
 	"runtime"
@@ -37,11 +36,14 @@ func main() {
 	router.GET("/api/weather", func(c *gin.Context) {
 		// Replace "YOUR_API_KEY" with your OpenWeatherMap API key
 		apiKey := "f1b9f1215362915f9c02ca5da2128e90"
-		weatherURL := fmt.Sprintf("http://api.openweathermap.org/data/2.5/weather?q=CityName&appid=%s", apiKey)
+		cityName := c.Query("city") // Get city name from query parameter
+
+		weatherURL := fmt.Sprintf("http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s", cityName, apiKey)
 
 		// Make a GET request to the OpenWeatherMap API
 		response, err := http.Get(weatherURL)
 		if err != nil {
+			log.Printf("Failed to fetch weather data: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch weather data"})
 			return
 		}
@@ -49,6 +51,7 @@ func main() {
 
 		// Check if the request was successful (status code 200)
 		if response.StatusCode != http.StatusOK {
+			log.Printf("Failed to fetch weather data. Status code: %d", response.StatusCode)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch weather data"})
 			return
 		}
@@ -56,6 +59,7 @@ func main() {
 		// Parse the JSON response using the "encoding/json" package
 		var weatherData map[string]interface{}
 		if err := json.NewDecoder(response.Body).Decode(&weatherData); err != nil {
+			log.Printf("Failed to parse weather data: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse weather data"})
 			return
 		}
@@ -66,6 +70,6 @@ func main() {
 	// Run the server on the IPv4 loopback address and port 8080
 	err := router.Run("127.0.0.1:8080")
 	if err != nil {
-		fmt.Printf("Failed to start server: %v\n", err)
+		log.Fatalf("Failed to start server: %v", err)
 	}
 }

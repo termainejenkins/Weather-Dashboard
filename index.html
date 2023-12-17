@@ -15,7 +15,7 @@
   <div>
 
     <div id="app">
-      <!-- Your Alpine.js content goes here -->
+      <!-- Alpine.js content goes here -->
     </div>
 
     <!-- Input field to enter zip code-->
@@ -28,6 +28,10 @@
   
     <!-- Button to fetch weather data -->
     <button x-on:click="fetchWeatherData">Fetch Weather</button>
+    <button x-on:click="initAlpine().then(() => fetchWeatherData())">Fetch Weather2</button>
+
+    <p x-text="weather"></p>
+
 
   </div>
 
